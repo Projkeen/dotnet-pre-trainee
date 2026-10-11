@@ -14,5 +14,5 @@
 
 ##### \- Module 0: Git \& GitHub
 
-##### \- Module 1: Not Started
+##### \- Module 1: Started
 
