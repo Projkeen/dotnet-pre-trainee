@@ -3,22 +3,11 @@ char operation;
 bool askToContinue;
 
 Console.Write("Enter the first number: ");
-while (!double.TryParse(Console.ReadLine(), out a))
-{
-    Console.WriteLine("Error! Enter a number!");
-}
-
+a = SetNumber();
 Console.Write("Choose an operation (+, -, *, /): ");
-while (!char.TryParse(Console.ReadLine(), out operation))
-{
-    Console.Write("Unsupported operation. Please use +, -, *, or / : ");
-}
-
+operation = SetOperation();
 Console.Write("Enter the second number: ");
-while (!double.TryParse(Console.ReadLine(), out b))
-{
-    Console.WriteLine("Error! Enter a number!");
-}
+b = SetNumber();
 
 switch (operation)
 {
@@ -37,7 +26,7 @@ switch (operation)
     default: throw new InvalidOperationException("Unknown operation");
 }
 
-Console.WriteLine($"Result {result}");
+Console.WriteLine($"Result: {result}");
 
 double Summing(double a, double b)
 {
@@ -60,3 +49,39 @@ double Division(double a, double b)
         return a / b;
     throw new DivideByZeroException();
 }
+
+double SetNumber()
+{
+    while (true)
+    {        
+        if (double.TryParse(Console.ReadLine(), out double number))
+        {
+            return number;
+        }
+        else
+        {
+            Console.Write("Error! Enter a number!: ");
+        }
+    }
+}
+
+char SetOperation()
+{
+    while (true)
+    {        
+        string? toChar = Console.ReadLine();
+        if (toChar != null && toChar.Length == 1)
+        {
+            if (toChar == "+" || toChar == "-" || toChar == "*" || toChar == "/")
+            {
+                return operation = toChar[0]; ;
+            }
+            Console.Write("Unsupported operation. Please use +, -, *, or /.: ");
+        }
+        else
+        {
+            Console.Write("Unsupported operation. Please use +, -, *, or /.: ");
+        }
+    }
+}
+
