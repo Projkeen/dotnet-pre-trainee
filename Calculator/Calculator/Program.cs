@@ -4,7 +4,7 @@ bool askToContinue;
 
 Console.Write("Enter the first number: ");
 a = SetNumber();
-Console.Write("Choose an operation (+, -, *, /): ");
+Console.Write("Choose an operation (+, -, * or / ): ");
 operation = SetOperation();
 Console.Write("Enter the second number: ");
 b = SetNumber();
@@ -13,20 +13,31 @@ switch (operation)
 {
     case '+':
         result = Summing(a, b);
+        Console.WriteLine($"Result: {result}");
         break;
     case '-':
         result = Subtraction(a, b);
+        Console.WriteLine($"Result: {result}");
         break;
     case '*':
         result = Multiplication(a, b);
+        Console.WriteLine($"Result: {result}");
         break;
     case '/':
-        result = Division(a, b);
+        try
+        {
+            result = Division(a, b);
+            Console.WriteLine($"Result: {result}");
+        }
+        catch (DivideByZeroException)
+        {
+            Console.WriteLine("Error! Division by zero is not allowed.");
+        }
         break;
     default: throw new InvalidOperationException("Unknown operation");
 }
+//Console.WriteLine($"Result: {result}");
 
-Console.WriteLine($"Result: {result}");
 
 double Summing(double a, double b)
 {
@@ -53,7 +64,7 @@ double Division(double a, double b)
 double SetNumber()
 {
     while (true)
-    {        
+    {
         if (double.TryParse(Console.ReadLine(), out double number))
         {
             return number;
@@ -68,7 +79,7 @@ double SetNumber()
 char SetOperation()
 {
     while (true)
-    {        
+    {
         string? toChar = Console.ReadLine();
         if (toChar != null && toChar.Length == 1)
         {
