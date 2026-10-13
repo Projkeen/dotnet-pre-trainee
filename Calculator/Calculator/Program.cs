@@ -89,7 +89,7 @@ char SetOperation()
         {
             if (toChar == "+" || toChar == "-" || toChar == "*" || toChar == "/")
             {
-                return operation = toChar[0]; ;
+                return operation = toChar[0];
             }
             Console.Write("Unsupported operation. Please use +, -, *, or /.: ");
         }
@@ -118,4 +118,6 @@ bool AskToContinue()
         Console.WriteLine("Please enter 'y' or 'n': ");
     }
 }
+
+
 
