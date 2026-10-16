@@ -13,10 +13,10 @@
             Console.WriteLine($"Manager {Name} is managing a team of {TeamSize} people.");
         }
 
-        public override void PrintInfo()
+        public override string PrintInfo()
         {
-            base.PrintInfo();
-            Console.WriteLine($"Team size: {TeamSize} people. [Manager] ");
+            //base.PrintInfo();
+            return (base.PrintInfo() + $"Team size: {TeamSize} people. [Manager] ");
         }
 
         public string GenerateReport()

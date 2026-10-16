@@ -14,10 +14,10 @@
             Console.WriteLine($"Developer {Name} is writing {ProgrammingLanguage} code.");
         }
 
-        public override void PrintInfo()
+        public override string PrintInfo()
         {
-            base.PrintInfo();
-            Console.WriteLine($"Programming language: {ProgrammingLanguage}. [Developer] ");
+            //base.PrintInfo();
+            return base.PrintInfo() + $"Programming language: {ProgrammingLanguage}. [Developer] ";
         }
 
         public string GenerateReport()

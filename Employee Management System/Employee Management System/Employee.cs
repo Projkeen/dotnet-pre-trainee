@@ -49,9 +49,14 @@
             Salary = salary;
         }
 
-        public virtual void PrintInfo()
+        public virtual string PrintInfo()
         {
-            Console.Write($"Id: <{Id}>: Name: {Name}, salary: {Salary}, ");
+            return $"Id: <{Id}>: Name: {Name}, salary: {Salary}, ";
+        }
+
+        public int GetId()
+        {
+            return Id;
         }
     }
 }

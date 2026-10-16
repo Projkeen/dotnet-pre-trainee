@@ -14,10 +14,10 @@ namespace Employee_Management_System
             Console.WriteLine($"Designer {Name} is working in {DesignTool}");
         }
 
-        public override void PrintInfo()
+        public override string PrintInfo()
         {
-            base.PrintInfo();
-            Console.WriteLine($"Tool: {DesignTool}. [Designer] ");
+            //base.PrintInfo();
+            return base.PrintInfo() + $"Tool: {DesignTool}. [Designer] ";
         }
     }
 }
