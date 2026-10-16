@@ -2,36 +2,56 @@
 {
     public abstract class Employee
     {
-        public int Id { get; set; }
-        public string Name { get; private set; }
-        public int Salary { get; private set; }
+        protected int Id { get; set; }
+        protected string Name { get; private set; }
+        protected decimal Salary { get; private set; }
 
-        public Employee(int id, string name, int salary)
+        public Employee(int id, string name, decimal salary)
         {
             Id = id;
-            Name = name;
-            Salary = salary;
+            Name = SetName(name);
+            Salary = SetSalary(salary);            
+            //Name = name;
+            //Salary = salary;
         }
 
-        public void SetName(string name)
+        public string GetName()
         {
-            if (name == null)
+            return Name;
+        }
+        public string SetName(string name)
+        {
+            if (name.Count() == 0 || string.IsNullOrWhiteSpace(name))
             {
-                Console.WriteLine("The name shouldn't be empty");
-                return;
+                Name = "<Name must not be empty>";
+                return Name;
             }
             Name = name;
+            return Name;
         }
-        public void SetSalary(int salary)
+        public decimal SetSalary(decimal salary)
         {
             if (salary < 0)
             {
-                Console.WriteLine("The salary shouldn't be less than 0");
-                return;
+                //Salary = "Salary must not be negative.";
+                Salary = 0;
+                return Salary;
             }
             Salary = salary;
+            return Salary;
         }
 
         public abstract void Work();
+
+        public void ChangeSalary(decimal salary)
+        {
+            SetSalary(salary);
+            Salary = salary;
+        }
+
+        public virtual void PrintInfo()
+        {
+            Console.Write($"Id: <{Id}>: Name: {Name}, salary: {Salary}, ");
+        }
     }
 }

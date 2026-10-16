@@ -5,13 +5,19 @@ namespace Employee_Management_System
     {
         public string DesignTool {  get; set; }
 
-        public Designer(int id, string name, int salary, string  designTool) : base(id, name, salary)
+        public Designer(int id, string name, decimal salary, string  designTool) : base(id, name, salary)
         {
             DesignTool = designTool;
         }
         public override void Work()
         {
-            Console.WriteLine("Designer Kate is working in Figma.");
+            Console.WriteLine($"Designer {Name} is working in {DesignTool}");
+        }
+
+        public override void PrintInfo()
+        {
+            base.PrintInfo();
+            Console.WriteLine($"Tool: {DesignTool}. [Designer] ");
         }
     }
 }
