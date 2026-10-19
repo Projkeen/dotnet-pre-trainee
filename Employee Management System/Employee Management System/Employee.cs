@@ -5,6 +5,8 @@
         protected int Id { get; set; }
         protected string Name { get; private set; }
         protected decimal Salary { get; private set; }
+               
+        public event EventHandler? SalaryChanged;
 
         public Employee(int id, string name, decimal salary)
         {
@@ -29,6 +31,12 @@
             Name = name;
             return Name;
         }
+
+        public decimal GetSalary()
+        {
+            return Salary;
+        }
+
         public decimal SetSalary(decimal salary)
         {
             if (salary < 0)
@@ -37,16 +45,21 @@
                 Salary = 0;
                 return Salary;
             }
+            if (Salary == salary)
+            {
+                return Salary;
+            }
             Salary = salary;
+            ChangeSalary(salary);
             return Salary;
+            
         }
 
         public abstract void Work();
 
         public void ChangeSalary(decimal salary)
-        {
-            SetSalary(salary);
-            Salary = salary;
+        {            
+            SalaryChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public virtual string PrintInfo()

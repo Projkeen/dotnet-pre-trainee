@@ -14,6 +14,10 @@ List<Employee> employees = new List<Employee>();
 }
 
 ConsoleMenu consoleMenu = new ConsoleMenu(employees);
+foreach (Employee employee in employees)
+{
+    consoleMenu.SubToSalaryChanging(employee);
+}
 consoleMenu.ShowMenu();
 consoleMenu.ShowAllEmployees();
 consoleMenu.MakeAllEmployeesWork();

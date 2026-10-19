@@ -77,5 +77,13 @@ namespace Employee_Management_System
             }
             return reports;
         }
+
+        public void SubToSalaryChanging(Employee employee)
+        {
+            employee.SalaryChanged += (sender, e) =>
+            {
+                Console.WriteLine($"Salary for {employee.GetName()} has been changed to {employee.GetSalary()}");
+            };
+        }
     }
 }
