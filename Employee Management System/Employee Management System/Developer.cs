@@ -9,20 +9,10 @@
             ProgrammingLanguage = language;
         }
 
-        public override void Work()
-        {
-            Console.WriteLine($"Developer {Name} is writing {ProgrammingLanguage} code.");
-        }
+        public override void Work() => Console.WriteLine($"Developer {Name} is writing {ProgrammingLanguage} code.");        
 
-        public override string PrintInfo()
-        {
-            //base.PrintInfo();
-            return base.PrintInfo() + $"Programming language: {ProgrammingLanguage}. [Developer] ";
-        }
+        public override string PrintInfo() => base.PrintInfo() + $"Programming language: {ProgrammingLanguage}. [Developer] ";        
 
-        public string GenerateReport()
-        {
-            return $"Developer report: Developer {Name} create a new feature using {ProgrammingLanguage}";
-        }
+        public string GenerateReport() => $"Developer report: Developer {Name} create a new feature using {ProgrammingLanguage}.";        
     }
 }

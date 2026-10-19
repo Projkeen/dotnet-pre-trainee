@@ -1,5 +1,4 @@
-﻿
-namespace Employee_Management_System
+﻿namespace Employee_Management_System
 {
     public class Designer : Employee
     {
@@ -9,15 +8,8 @@ namespace Employee_Management_System
         {
             DesignTool = designTool;
         }
-        public override void Work()
-        {
-            Console.WriteLine($"Designer {Name} is working in {DesignTool}");
-        }
+        public override void Work() => Console.WriteLine($"Designer {Name} is working in {DesignTool}.");        
 
-        public override string PrintInfo()
-        {
-            //base.PrintInfo();
-            return base.PrintInfo() + $"Tool: {DesignTool}. [Designer] ";
-        }
+        public override string PrintInfo() => base.PrintInfo() + $"Tool: {DesignTool}. [Designer] ";        
     }
 }

@@ -8,21 +8,11 @@
         {
             TeamSize = teamSize;
         }
-        public override void Work()
-        {
-            Console.WriteLine($"Manager {Name} is managing a team of {TeamSize} people.");
-        }
+        public override void Work() => Console.WriteLine($"Manager {Name} is managing a team of {TeamSize} people.");        
 
-        public override string PrintInfo()
-        {
-            //base.PrintInfo();
-            return (base.PrintInfo() + $"Team size: {TeamSize} people. [Manager] ");
-        }
+        public override string PrintInfo() => base.PrintInfo() + $"Team size: {TeamSize} people. [Manager] ";
 
-        public string GenerateReport()
-        {
-            return $"Manager report: Manager {Name} create a new tasks for {TeamSize} people";
-        }
+        public string GenerateReport() => $"Manager report: Manager {Name} create a new tasks for {TeamSize} people.";        
     }
 
 

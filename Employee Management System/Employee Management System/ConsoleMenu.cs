@@ -1,17 +1,15 @@
-﻿
+﻿using System.Threading.Channels;
+
 namespace Employee_Management_System
 {
     public class ConsoleMenu
     {
         private List<Employee> _employees;
-        public ConsoleMenu(List<Employee> employees)
-        {
-            _employees = employees;
-        }
+        public ConsoleMenu(List<Employee> employees) => _employees = employees;        
 
         public void ShowMenu()
         {
-            Console.WriteLine("_____________________________________________________________________");
+            Console.WriteLine("__________________________________________________________________________________");
             Console.WriteLine("Employee management system");
             Console.WriteLine("Press <1> to show all employees");
             Console.WriteLine("Press <2> to make all employees work");
@@ -50,15 +48,13 @@ namespace Employee_Management_System
                 Console.WriteLine($"Employee with Id {id} was not found.");
                 return;
             }
-            Console.WriteLine($"Enter new salary for {employee.GetName()}");
+            Console.Write($"Enter new salary for {employee.GetName()}: ");            
             if(!decimal.TryParse(Console.ReadLine(), out decimal salary))
             {
                 Console.WriteLine("Invalid input. Please enter a number ");
                 return;
-            }            
-            
-            employee.SetSalary(salary);          
-            
+            }                        
+            employee.SetSalary(salary);   
         }
 
         public IEnumerable<IReportable> ShowReports()
@@ -79,11 +75,42 @@ namespace Employee_Management_System
         }
 
         public void SubToSalaryChanging(Employee employee)
-        {
+        {            
             employee.SalaryChanged += (sender, e) =>
             {
                 Console.WriteLine($"Salary for {employee.GetName()} has been changed to {employee.GetSalary()}");
             };
+        }
+
+        public void Start()
+        {
+            while (true)
+            {
+                ShowMenu();
+                Console.Write("Select: ");                
+                string? input = Console.ReadLine();
+                Console.WriteLine("__________________________________________________________________________________");               
+                switch (input)
+                {
+                    case "1":
+                        ShowAllEmployees();
+                        break;
+                    case "2":
+                        MakeAllEmployeesWork();
+                            break;
+                    case "3":
+                        ChangeSalary();
+                        break;
+                    case "4":
+                        ShowReports(); break;
+                    case "5":
+                        Console.WriteLine("Exit");
+                        return;
+                    default:
+                        Console.WriteLine("Unknown operation, please select from 1 to 5");
+                        break;
+                }
+            }
         }
     }
 }
