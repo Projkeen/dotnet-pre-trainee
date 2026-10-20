@@ -58,3 +58,31 @@ Topics:
 
 
 
+\## Module 2
+
+
+
+Status: Completed
+
+
+
+Topics:
+
+
+
+\- Introduction to OOP
+
+\- Classes and Objects
+
+\- Fields, Properties and Constructors
+
+\- Encapsulation, Inheritance, Polymorphism
+
+\- Abstraction and Abstract Classes
+
+\- Interfaces
+
+\- Events and Lambda Expressions
+
+&#x20;
+

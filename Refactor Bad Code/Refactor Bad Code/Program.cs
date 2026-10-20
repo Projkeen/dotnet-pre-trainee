@@ -1,158 +1,145 @@
-﻿using System;
+﻿using Refactor_Bad_Code;
+using System;
 using System.Collections.Generic;
 
-public class User
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public decimal Discount { get; set; }
-}
 
-public class UserService
-{
-    private readonly List<User> _users = new();
+//public class UserService
+//{
+    //private readonly List<User> _users = new();
+    //private readonly IUserRepository _userRepository;
+    //public UserService(IUserRepository userRepository)
+    //{
+    //    _userRepository = userRepository;
+    //}
 
-    public void RegisterUser(
-        int id,
-        string name,
-        string email,
-        string notificationType)
-    {
+    //public void RegisterUser(int id, string name, string email, string notificationType)
+    //{
         // Validation
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            Console.WriteLine("Name is required.");
-            return;
-        }
+        //if (string.IsNullOrWhiteSpace(name))
+        //{
+        //    Console.WriteLine("Name is required.");
+        //    return;
+        //}
 
-        if (string.IsNullOrWhiteSpace(email))
-        {
-            Console.WriteLine("Email is required.");
-            return;
-        }
+        //if (string.IsNullOrWhiteSpace(email))
+        //{
+        //    Console.WriteLine("Email is required.");
+        //    return;
+        //}
 
-        if (!email.Contains("@"))
-        {
-            Console.WriteLine("Email is invalid.");
-            return;
-        }
+        //if (!email.Contains("@"))
+        //{
+        //    Console.WriteLine("Email is invalid.");
+        //    return;
+        //}
 
-        // Create user
-        var user = new User
-        {
-            Id = id,
-            Name = name,
-            Email = email
-        };
+        //// Create user
+        //var user = new User
+        //{
+        //    Id = id,
+        //    Name = name,
+        //    Email = email
+        //};
 
-        // Business rule
-        if (name.Length > 10)
-        {
-            user.Discount = 10;
-        }
-        else
-        {
-            user.Discount = 5;
-        }
+        //// Business rule
+        //if (name.Length > 10)
+        //{
+        //    user.Discount = 10;
+        //}
+        //else
+        //{
+        //    user.Discount = 5;
+        //}
 
-        // Save user
-        _users.Add(user);
+        //// Save user
+        //_users.Add(user);
 
         // Send notification
-        if (notificationType == "email")
-        {
-            Console.WriteLine(
-                $"Sending EMAIL to {email}: Welcome, {name}!");
-        }
-        else if (notificationType == "sms")
-        {
-            Console.WriteLine(
-                $"Sending SMS to user {name}: Welcome!");
-        }
-        else if (notificationType == "push")
-        {
-            Console.WriteLine(
-                $"Sending PUSH notification to {name}");
-        }
-        else
-        {
-            Console.WriteLine("Unknown notification type.");
-        }
+        //if (notificationType == "email")
+        //{
+        //    Console.WriteLine(
+        //        $"Sending EMAIL to {email}: Welcome, {name}!");
+        //}
+        //else if (notificationType == "sms")
+        //{
+        //    Console.WriteLine(
+        //        $"Sending SMS to user {name}: Welcome!");
+        //}
+        //else if (notificationType == "push")
+        //{
+        //    Console.WriteLine(
+        //        $"Sending PUSH notification to {name}");
+        //}
+        //else
+        //{
+        //    Console.WriteLine("Unknown notification type.");
+        //}
 
         // Logging
-        Console.WriteLine(
-            $"LOG: User {name} was registered at {DateTime.Now}");
-    }
+    //    Console.WriteLine(
+    //        $"LOG: User {name} was registered at {DateTime.Now}");
+    //}
 
-    public void UpdateEmail(int userId, string newEmail)
-    {
-        // Duplicate validation logic
-        if (string.IsNullOrWhiteSpace(newEmail))
-        {
-            Console.WriteLine("Email is required.");
-            return;
-        }
+    //public void UpdateEmail(int userId, string newEmail)
+    //{
+    //    // Duplicate validation logic
+    //    if (string.IsNullOrWhiteSpace(newEmail))
+    //    {
+    //        Console.WriteLine("Email is required.");
+    //        return;
+    //    }
 
-        if (!newEmail.Contains("@"))
-        {
-            Console.WriteLine("Email is invalid.");
-            return;
-        }
+    //    if (!newEmail.Contains("@"))
+    //    {
+    //        Console.WriteLine("Email is invalid.");
+    //        return;
+    //    }
 
-        var user = _users.Find(x => x.Id == userId);
+    //    var user = _users.Find(x => x.Id == userId);
 
-        if (user == null)
-        {
-            Console.WriteLine("User not found.");
-            return;
-        }
+    //    if (user == null)
+    //    {
+    //        Console.WriteLine("User not found.");
+    //        return;
+    //    }
 
-        user.Email = newEmail;
+    //    user.Email = newEmail;
 
-        Console.WriteLine(
-            $"LOG: Email for user {user.Name} was changed.");
-    }
+    //    Console.WriteLine(
+    //        $"LOG: Email for user {user.Name} was changed.");
+    //}
 
-    public void PrintAllUsers()
-    {
-        foreach (var user in _users)
-        {
-            Console.WriteLine(
-                $"{user.Id} | {user.Name} | {user.Email} | Discount: {user.Discount}%");
-        }
-    }
+    //public void PrintAllUsers()
+    //{
+    //    foreach (var user in _userRepository.GetAllUsers())
+    //    {
+    //        Console.WriteLine(
+    //            $"{user.Id} | {user.Name} | {user.Email} | Discount: {user.Discount}%");
+    //    }
+    //}
 
     // Added "for the future", but currently nobody needs it
-    public void GenerateAdvancedAnalyticsReport()
-    {
-        Console.WriteLine("Generating advanced analytics...");
-        Console.WriteLine("Calculating user behavior...");
-        Console.WriteLine("Predicting future purchases...");
-    }
-}
+    //public void GenerateAdvancedAnalyticsReport()
+    //{
+    //    Console.WriteLine("Generating advanced analytics...");
+    //    Console.WriteLine("Calculating user behavior...");
+    //    Console.WriteLine("Predicting future purchases...");
+    //}
+//}
 
 public class Program
 {
     public static void Main()
     {
-        var userService = new UserService();
+        var userService = new UserService(new UserRepository());        
 
-        userService.RegisterUser(
-            1,
-            "Anna",
-            "anna@example.com",
-            "email");
+        userService.RegisterUser(1, "Anna", "anna@example.com", "email");
 
-        userService.RegisterUser(
-            2,
-            "Christopher",
-            "christopher@example.com",
-            "sms");
+        userService.RegisterUser(2, "Christopher", "christopher@example.com", "sms");
 
-        userService.UpdateEmail(
-            1,
-            "anna.new@example.com");
+        //userService.UpdateEmail(
+        //    1,
+        //    "anna.new@example.com");
 
         userService.PrintAllUsers();
     }
