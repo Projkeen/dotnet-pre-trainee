@@ -10,8 +10,7 @@ Console.WriteLine(ProcessData("File 3"));
 
 syncWatch.Stop();
 
-Console.WriteLine(
-    $"Synchronous time: {syncWatch.Elapsed.TotalSeconds:F2} seconds");
+Console.WriteLine($"Synchronous time: {syncWatch.Elapsed.TotalSeconds:F2} seconds");
 
 Console.WriteLine();
 
@@ -30,20 +29,21 @@ var tasks = new List<Task<string>>
 
 asyncWatch.Stop();
 
-Console.WriteLine(
-    $"Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
+Console.WriteLine($"Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
 
 
 static string ProcessData(string dataName)
 {
     // Implement synchronous processing.
-    throw new NotImplementedException();
+    Console.WriteLine($"Process started for {dataName}");
+    Thread.Sleep(3000);
+    return $"Processing has completed in 3 seconds for {dataName}";
 }
 
-static async Task<string> ProcessDataAsync(
-    string dataName,
-    int delayMilliseconds)
+static async Task<string> ProcessDataAsync(string dataName, int delayMilliseconds)
 {
     // Implement asynchronous processing.
-    throw new NotImplementedException();
+    Console.WriteLine($"Process starting for {dataName}");
+    await Task.Delay(delayMilliseconds);
+    return $"Processing has completed in {delayMilliseconds} milliseconds for {dataName}";
 }
