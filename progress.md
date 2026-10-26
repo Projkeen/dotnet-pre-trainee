@@ -84,5 +84,39 @@ Topics:
 
 \- Events and Lambda Expressions
 
+
+
+\## Module 3
+
+
+
+Status: Completed
+
+
+
+Topics:
+
+
+
+\- Introduction to Clean Code Principles
+
+\- Single Responsibility Principle
+
+\- Open/Closed Principle
+
+\- Liskov Substitution Principle
+
+\- Interface Segregation Principle
+
+\- Dependency Inversion Principle
+
+\- DRY — Don't Repeat Yourself
+
+\- KISS — Keep It Simple
+
+\- YAGNI — You Aren't Gonna Need It
+
+
+
 &#x20;
 
