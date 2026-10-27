@@ -57,6 +57,38 @@ for (int i = 0; i < totalTasks; i++)
 asyncWatch.Stop();
 Console.WriteLine($"Total Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
 
+Console.WriteLine();
+
+Console.WriteLine("=== Task with Exception ===");
+
+asyncWatch = Stopwatch.StartNew();
+var tasksWithException = new List<Task<string>>
+{
+    ProcessDataWithExceptionAsync("File 1", 3000),
+    ProcessDataWithExceptionAsync("File 2", 1000),
+    ProcessDataWithExceptionAsync("File 3", 2000)
+};
+
+foreach (Task<string> result in tasksWithException)
+{
+    try
+    {
+        List<string> catchTaskWithException = (await Task.WhenAll(result)).ToList();
+        foreach (string task in catchTaskWithException)
+        {
+            Console.WriteLine(task);
+        }          
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Exception: {ex.Message}");
+    }
+}
+
+asyncWatch.Stop();
+Console.WriteLine($"Total Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
+
+
 static string ProcessData(string dataName)
 {
     // Implement synchronous processing.
@@ -71,4 +103,15 @@ static async Task<string> ProcessDataAsync(string dataName, int delayMillisecond
     Console.WriteLine($"Process starting for {dataName}");
     await Task.Delay(delayMilliseconds);
     return $"Processing has completed in {delayMilliseconds} milliseconds for {dataName}";
+}
+
+static async Task<string> ProcessDataWithExceptionAsync(string dataName, int delayMilliseconds)
+{
+    Console.WriteLine($"Process with exception starting for {dataName}");
+    await Task.Delay(delayMilliseconds);
+    if (dataName == "File 2")
+    {
+        throw new InvalidOperationException($"Processing File 2 failed: Unable to process data: {dataName}");
+    }
+    return $"Processing with exception has completed in {delayMilliseconds} milliseconds for {dataName}";
 }
