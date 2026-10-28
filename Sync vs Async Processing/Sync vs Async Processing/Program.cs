@@ -35,6 +35,7 @@ foreach (var result in results)
 asyncWatch.Stop();
 
 Console.WriteLine($"Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
+Console.WriteLine();
 
 asyncWatch = Stopwatch.StartNew();
 
@@ -58,7 +59,6 @@ asyncWatch.Stop();
 Console.WriteLine($"Total Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
 
 Console.WriteLine();
-
 Console.WriteLine("=== Task with Exception ===");
 
 asyncWatch = Stopwatch.StartNew();
@@ -69,25 +69,29 @@ var tasksWithException = new List<Task<string>>
     ProcessDataWithExceptionAsync("File 3", 2000)
 };
 
-foreach (Task<string> result in tasksWithException)
+try
 {
-    try
-    {
-        List<string> catchTaskWithException = (await Task.WhenAll(result)).ToList();
-        foreach (string task in catchTaskWithException)
-        {
-            Console.WriteLine(task);
-        }          
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Exception: {ex.Message}");
-    }
+    await Task.WhenAll(tasksWithException);
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Exception: {ex.Message}");
+}
+foreach (var task in tasksWithException)
+{
+    if (task.IsFaulted)    
+        Console.WriteLine($"{task.Exception!.InnerException!.Message}");    
+    else    
+        Console.WriteLine(task.Result);        
 }
 
 asyncWatch.Stop();
 Console.WriteLine($"Total Asynchronous time: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
 
+Console.WriteLine();
+Console.WriteLine("=== Compare the Results ===");
+Console.WriteLine($"Synchronous processing:  {syncWatch.Elapsed.TotalSeconds:F2} seconds");
+Console.WriteLine($"Asynchronous processing: {asyncWatch.Elapsed.TotalSeconds:F2} seconds");
 
 static string ProcessData(string dataName)
 {
