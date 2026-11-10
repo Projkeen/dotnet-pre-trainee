@@ -2,6 +2,8 @@
 
 
 
+
+
 \## Module 0
 
 
@@ -27,6 +29,8 @@ Topics:
 \- Push
 
 \- Pull
+
+
 
 
 
@@ -58,6 +62,8 @@ Topics:
 
 
 
+
+
 \## Module 2
 
 
@@ -83,6 +89,8 @@ Topics:
 \- Interfaces
 
 \- Events and Lambda Expressions
+
+
 
 
 
@@ -115,6 +123,68 @@ Topics:
 \- KISS — Keep It Simple
 
 \- YAGNI — You Aren't Gonna Need It
+
+
+
+
+
+\## Module 4
+
+
+
+Status: Completed
+
+
+
+Topics:
+
+
+
+\- Introduction to Asynchronous Programming
+
+\- Blocking vs Non-Blocking Operations
+
+\- Task, async and await
+
+\- Task.Delay vs Thread.Sleep
+
+\- Running Multiple Tasks
+
+\- Task.WhenAll and Waiting for Completion
+
+\- Exceptions in Async Code
+
+
+
+
+
+\## Module 5
+
+
+
+Status: Completed
+
+
+
+Topics:
+
+
+
+\- Introduction to Databases
+
+\- Relational Databases and Tables
+
+\- SQL Basics — SELECT, INSERT, UPDATE, DELETE
+
+\- Primary Keys, Foreign Keys and Relationships
+
+\- JOINs
+
+\- Transactions and ACID
+
+\- Indexes
+
+\- SQL Server Setup and Basic Workflow
 
 
 

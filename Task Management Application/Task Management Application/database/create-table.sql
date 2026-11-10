@@ -1,0 +1,11 @@
+USE TaskManagementDb;
+GO
+
+CREATE TABLE Tasks
+(
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Title NVARCHAR(200) NOT NULL,
+    Description NVARCHAR(1000) NULL,
+    IsCompleted BIT NOT NULL DEFAULT 0,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETDATE(),  
+);
