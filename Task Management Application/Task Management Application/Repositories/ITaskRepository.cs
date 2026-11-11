@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Task_Management_Application.Models;
+﻿using Task_Management_Application.Models;
 
 namespace Task_Management_Application.Repositories
 {
@@ -15,5 +10,6 @@ namespace Task_Management_Application.Repositories
         Task<bool> UpdateAsync(int id, string title, string? description);
         Task<bool> CompleteAsync(int id);
         Task<bool> DeleteAsync(int id);
+        Task<int?> ReplaceAsync(int oldTaskId, string newTitle, string? newDescription);
     }
 }

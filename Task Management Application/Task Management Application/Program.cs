@@ -4,15 +4,25 @@ using Task_Management_Application.Repositories;
 
 string connectionString = "Server=(localdb)\\MSSQLLocalDB;" + "Database=TaskManagementDb;" + "Integrated Security=True;"
     + "TrustServerCertificate=True;";
-await using var connection = new SqlConnection(connectionString);
-Console.WriteLine("Database connection successful.");
-
-string databaseName = await connection.QuerySingleAsync<string>("SELECT DB_NAME()");
-Console.WriteLine($"Connected database: {databaseName}");
+  
+try
+{
+    await using var connection = new SqlConnection(connectionString);
+    await connection.OpenAsync();
+    Console.WriteLine("Database connection successful.");
+    string databaseName = await connection.QuerySingleAsync<string>("SELECT DB_NAME()");
+    Console.WriteLine($"Connected database: {databaseName}");
+}
+catch (SqlException ex)
+{
+    Console.WriteLine($"Db error: {ex.Message} Check existing database and the connection string is correct");
+}
 
 ITaskRepository repository = new TaskRepository(connectionString);
 
-while (true)
+bool inProcess = true;
+
+while (inProcess)
 {
     Console.WriteLine("______________________________________________________________________________________________");
     Console.WriteLine("Operations: ");
@@ -22,33 +32,48 @@ while (true)
     Console.WriteLine("4. Press <4> to update task by ID");
     Console.WriteLine("5. Press <5> to complete task by ID");
     Console.WriteLine("6. Press <6> to delete task by ID");
+    Console.WriteLine("7. Press <7> to mark task as complete and create new task (transaction)");
+    Console.WriteLine("8. Press <8> to Exit");
     Console.Write("Select operation: ");
 
     string? select = Console.ReadLine();
-
-    switch (select)
+    try
     {
-        case "1":
-            await ShowAllTasksAsync();
-            break;
-        case "2":
-            await GetTasksByIdAsync();
-            break;
-        case "3":
-            await CreateTaskAsync();
-            break;
-        case "4":
-            await UpdateTaskAsync();
-            break;
-        case "5":
-            await CompleteTaskAsync();
-            break;
-        case "6":
-            await DeleteTaskAsync();
-            break;
-        default:
-            Console.WriteLine("Unknown option");
-            break;
+        switch (select)
+        {
+            case "1":
+                await ShowAllTasksAsync();
+                break;
+            case "2":
+                await GetTasksByIdAsync();
+                break;
+            case "3":
+                await CreateTaskAsync();
+                break;
+            case "4":
+                await UpdateTaskAsync();
+                break;
+            case "5":
+                await CompleteTaskAsync();
+                break;
+            case "6":
+                await DeleteTaskAsync();
+                break;
+            case "7":
+                await ReplaceTaskAsync();
+                break;
+            case "8":
+                inProcess = false;
+                Console.WriteLine("Exit");
+                break;
+            default:
+                Console.WriteLine("Unknown operation");
+                break;
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
     }
 
     async Task ShowAllTasksAsync()
@@ -57,13 +82,13 @@ while (true)
 
         if (tasks.Count == 0)
         {
-            Console.WriteLine("No tasks");            
+            Console.WriteLine("No tasks");
         }
 
         foreach (var task in tasks)
         {
             Console.WriteLine($"{task.Id}: {task.Title} | Description: {task.Description} | Completed: {task.IsCompleted} | Created at: {task.CreatedAt}");
-        }            
+        }
     }
 
     async Task GetTasksByIdAsync()
@@ -82,6 +107,10 @@ while (true)
     {
         Console.Write("Title: ");
         string? title = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            throw new Exception("Title can not be empty");
+        }
 
         Console.Write("Description: ");
         string? description = Console.ReadLine();
@@ -89,7 +118,7 @@ while (true)
         int newId = await repository.CreateAsync(title, description);
         Console.WriteLine($"Task created with ID: {newId}");
         var task = await repository.GetByIdAsync(newId);
-        Console.WriteLine($"{task.Id}: {task.Title} | Description: {task.Description} | Completed: {task.IsCompleted} | Created at: {task.CreatedAt}");
+        Console.WriteLine($"{task!.Id}: {task.Title} | Description: {task.Description} | Completed: {task.IsCompleted} | Created at: {task.CreatedAt}");
     }
 
     async Task UpdateTaskAsync()
@@ -99,6 +128,10 @@ while (true)
 
         Console.Write("New title: ");
         string? title = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            throw new Exception("Title can not be empty");
+        }
 
         Console.Write("New description: ");
         string? description = Console.ReadLine();
@@ -106,36 +139,38 @@ while (true)
         bool isUpdated = await repository.UpdateAsync(id, title, description);
         if (isUpdated == false)
         {
-            Console.WriteLine($"Task not found with id: {id}");            
+            Console.WriteLine($"Task not found with id: {id}");
+            return;
         }
         else
         {
             Console.WriteLine($"Task with id {id} was updated");
         }
         var task = await repository.GetByIdAsync(id);
-        Console.WriteLine($"{task.Id}: {task.Title} | Description: {task.Description} | Completed: {task.IsCompleted} | Created at: {task.CreatedAt}");
+        Console.WriteLine($"{task!.Id}: {task.Title} | Description: {task.Description} | Completed: {task.IsCompleted} | Created at: {task.CreatedAt}");
     }
 
     async Task CompleteTaskAsync()
     {
-        Console.WriteLine("Enter task id: ");
+        Console.Write("Enter task id: ");
         int id = SetNumber();
         bool isCompleted = await repository.CompleteAsync(id);
         if (isCompleted == false)
         {
-            Console.WriteLine($"Task not found with id: {id}");            
+            Console.WriteLine($"Task not found with id: {id}");
+            return;
         }
         else
         {
             Console.WriteLine($"Task with id {id} marked completed");
         }
         var task = await repository.GetByIdAsync(id);
-        Console.WriteLine($"{task.Id}: {task.Title} | Description: {task.Description}  | Completed: {task.IsCompleted} | Created at: {task.CreatedAt}");
+        Console.WriteLine($"{task!.Id}: {task.Title} | Description: {task.Description}  | Completed: {task.IsCompleted} | Created at: {task.CreatedAt}");
     }
 
     async Task DeleteTaskAsync()
     {
-        Console.WriteLine("Enter task id: ");
+        Console.Write("Enter task id: ");
         int id = SetNumber();
         bool isDeleted = await repository.DeleteAsync(id);
         if (isDeleted == false)
@@ -146,6 +181,36 @@ while (true)
         {
             Console.WriteLine($"Task with id {id} has been deleted");
         }
+    }
+
+    async Task ReplaceTaskAsync()
+    {
+        Console.Write("Enter id task for mark it complete and create new task: ");
+        int oldTaskId = SetNumber();
+
+        Console.Write("New title: ");
+        string? title = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(title))
+        {
+            throw new Exception("Title can not be empty");
+        }
+
+        Console.Write("New description: ");
+        string? description = Console.ReadLine();        
+
+        int newId = (int)await repository.ReplaceAsync(oldTaskId, title, description);
+
+        if (newId == 0)
+        {
+            Console.WriteLine("Task not found. No changes");
+            return;
+        }
+        else
+        {
+            Console.WriteLine($"Task {oldTaskId} marked as completed, new task created with ID: {newId}");
+        }
+        var task = await repository.GetByIdAsync(newId);
+        Console.WriteLine($"{task!.Id}: {task.Title} | Description: {task.Description}  | Completed: {task.IsCompleted} | Created at: {task.CreatedAt}");
     }
 
     int SetNumber()
