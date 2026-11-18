@@ -15,7 +15,7 @@ namespace Design_patterns
 
         public void OnOrderCompleted(object? sender, Order order)
         {
-            Console.WriteLine($"Confirmation to: {order.CustomerName}");
+            Console.WriteLine($"Order confirmation sent to customer: {order.CustomerName}");
         }
     }
 }

@@ -12,8 +12,14 @@ namespace Design_patterns
         {
             Console.WriteLine("Waiting...");
             await Task.Delay(1500);
-            Console.WriteLine($"Creating bank transfer for: {amount}");
-            return true;
+            if(amount <= 3000)
+            {
+                Console.WriteLine($"Creating bank transfer for: {amount}");
+                return true;
+            }                
+            Console.WriteLine("Payment must not be over 3000");
+            return false;
+            
         }
     }
 }

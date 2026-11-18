@@ -8,9 +8,11 @@ namespace Design_patterns
 {
     public class LegacyPayPalClient
     {
-        public void MakePayment(double amountInUsd)
+        public bool MakePayment(double amountInUsd)
         {
-            Console.WriteLine($"<Legacy Library: PayPal Client>: Making payment {amountInUsd} USD");
+            if (amountInUsd <= 1000)   
+                return true;
+            return false;            
         }
     }
 }

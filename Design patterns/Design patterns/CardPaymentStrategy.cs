@@ -13,8 +13,13 @@ namespace Design_patterns
         {            
             Console.WriteLine("Waiting...");
             await Task.Delay(1500);
-            Console.WriteLine($"Processing card payment: {amount} ");
-            return true;
+            if(amount <= 1500)
+            {
+                Console.WriteLine($"Processing card payment: {amount} ");
+                return true;
+            } 
+            Console.WriteLine("Payment must not be over 1500");            
+            return false;
         }
     }
 }

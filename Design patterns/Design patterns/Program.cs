@@ -1,47 +1,53 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Design_patterns;
+﻿using Design_patterns;
 
-Console.WriteLine("Hello, World!");
-
-CardPaymentStrategy cardStrategy = new CardPaymentStrategy();
-BankTransferPaymentStrategy bankStrategy = new BankTransferPaymentStrategy();
-LegacyPayPalClient legacyPayPalClient = new LegacyPayPalClient();
-PayPalPaymentAdapter payPalPaymentAdapter = new PayPalPaymentAdapter(legacyPayPalClient);
+//CardPaymentStrategy cardStrategy = new CardPaymentStrategy();
+//BankTransferPaymentStrategy bankStrategy = new BankTransferPaymentStrategy();
+//LegacyPayPalClient legacyPayPalClient = new LegacyPayPalClient();
+//PayPalPaymentAdapter payPalPaymentAdapter = new PayPalPaymentAdapter(legacyPayPalClient);
 PaymentStrategyFactory paymentStrategyFactory = new PaymentStrategyFactory();
 CheckoutService checkoutService = new CheckoutService();
-
 NotificationSubscriber sub = new NotificationSubscriber(checkoutService);
-
-
-await cardStrategy.PayAsync(150.00m);
-await bankStrategy.PayAsync(125.00m);
-legacyPayPalClient.MakePayment(100);
-await payPalPaymentAdapter.PayAsync(150);
-
-
-Console.WriteLine("Select payment: 1. Card, 2. PayPal, 3. Bank transfer");
-int type = SetNumber();
-int orderId = 1;
-IPaymentStrategy strategy = paymentStrategyFactory.Select(type);
-await strategy.PayAsync(255.15m);
-Console.WriteLine("Enter customer: ");
-string name = SetCustomerName();
-Console.WriteLine("Enter order amount: ");
-decimal totalAmount = SetAmount();
-Order order = new Order(orderId, name, totalAmount);
 checkoutService.OrderCompleted += (sub, order) => Console.WriteLine($"Audit: Order {order.Id} completed and added to audit log");
-await checkoutService.CheckoutAsync(order, strategy);
+int orderId = 1;
+//await cardStrategy.PayAsync(150.00m);
+//await bankStrategy.PayAsync(125.00m);
+//legacyPayPalClient.MakePayment(100);
+//await payPalPaymentAdapter.PayAsync(150);
 
 
+//Console.WriteLine("Select payment: 1. Card, 2. PayPal, 3. Bank transfer");
+//int type = SetNumber();
+
+//IPaymentStrategy strategy = paymentStrategyFactory.Select(type);
+//await strategy.PayAsync(255.15m);
+//Console.WriteLine("Enter customer: ");
+//string name = SetCustomerName();
+//Console.WriteLine("Enter order amount: ");
+//decimal totalAmount = SetAmount();
+//Order order = new Order(orderId, name, totalAmount);
 
 
-int SetNumber()
+while (true)
+{
+    Console.Write("Enter customer name: ");
+    string name = SetCustomerName();
+    Console.Write("Enter order amount: ");
+    decimal totalAmount = SetAmount();    
+    Console.WriteLine("Select payment: \n 1. Card, \n 2. PayPal, \n 3. Bank transfer");
+    int type = SetSelection();
+    IPaymentStrategy strategy = paymentStrategyFactory.Select(type);
+    Order order = new Order(orderId++, name, totalAmount);
+    await checkoutService.CheckoutAsync(order, strategy);
+}
+
+int SetSelection()
 {
     while (true)
     {
-        if (int.TryParse(Console.ReadLine(), out int number))
+        Console.Write("Select: ");
+        if (int.TryParse(Console.ReadLine(), out int number)  && number >= 1 && number <= 3)
             return number;
-        Console.Write("Error! Enter an integer!: ");
+        Console.Write("Unknown payment type! Select from 1 to 3: ");
     }
 }
 
@@ -61,6 +67,6 @@ decimal SetAmount()
     {
         if (decimal.TryParse(Console.ReadLine(), out decimal amount))
             return amount;
-        Console.WriteLine("Error! Enter a number");
+        Console.Write("Error! Enter a number: ");
     }
 }
