@@ -19,5 +19,9 @@ namespace Design_patterns
             CustomerName = customerName;
             TotalAmount = totalAmount;
         }
+        public void MarkCompleted()
+        {
+            IsCompleted = true;
+        }
     }
 }
