@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Design_patterns.Models;
 
-namespace Design_patterns
+namespace Design_patterns.Services
 {
     public class NotificationSubscriber
     {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Design_patterns
+﻿namespace Design_patterns.Payments
 {
     public class PaymentStrategyFactory
     {
@@ -20,8 +14,10 @@ namespace Design_patterns
                     return adapter;
                 case 3:
                     return new BankTransferPaymentStrategy();
+                case 4:
+                    return new CryptoPaymentStrategy();
                 default:
-                    throw new ArgumentException("Unknown payment type");
+                    throw new ArgumentException("Unknown payment type, select from 1 to 4");
             }
         }
     }

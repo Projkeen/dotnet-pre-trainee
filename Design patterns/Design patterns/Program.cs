@@ -1,51 +1,42 @@
-﻿using Design_patterns;
+﻿using Design_patterns.Models;
+using Design_patterns.Payments;
+using Design_patterns.Services;
 
-//CardPaymentStrategy cardStrategy = new CardPaymentStrategy();
-//BankTransferPaymentStrategy bankStrategy = new BankTransferPaymentStrategy();
-//LegacyPayPalClient legacyPayPalClient = new LegacyPayPalClient();
-//PayPalPaymentAdapter payPalPaymentAdapter = new PayPalPaymentAdapter(legacyPayPalClient);
 PaymentStrategyFactory paymentStrategyFactory = new PaymentStrategyFactory();
 CheckoutService checkoutService = new CheckoutService();
 NotificationSubscriber sub = new NotificationSubscriber(checkoutService);
 checkoutService.OrderCompleted += (sub, order) => Console.WriteLine($"Audit: Order {order.Id} completed and added to audit log");
 int orderId = 1;
-//await cardStrategy.PayAsync(150.00m);
-//await bankStrategy.PayAsync(125.00m);
-//legacyPayPalClient.MakePayment(100);
-//await payPalPaymentAdapter.PayAsync(150);
+bool askToContinue;
 
-
-//Console.WriteLine("Select payment: 1. Card, 2. PayPal, 3. Bank transfer");
-//int type = SetNumber();
-
-//IPaymentStrategy strategy = paymentStrategyFactory.Select(type);
-//await strategy.PayAsync(255.15m);
-//Console.WriteLine("Enter customer: ");
-//string name = SetCustomerName();
-//Console.WriteLine("Enter order amount: ");
-//decimal totalAmount = SetAmount();
-//Order order = new Order(orderId, name, totalAmount);
-
-
-while (true)
+do
 {
-    Console.Write("Enter customer name: ");
-    string name = SetCustomerName();
-    Console.Write("Enter order amount: ");
-    decimal totalAmount = SetAmount();    
-    Console.WriteLine("Select payment: \n 1. Card, \n 2. PayPal, \n 3. Bank transfer");
-    int type = SetSelection();
-    IPaymentStrategy strategy = paymentStrategyFactory.Select(type);
-    Order order = new Order(orderId++, name, totalAmount);
-    await checkoutService.CheckoutAsync(order, strategy);
-}
+    try
+    {
+        Console.Write("Enter customer name: ");
+        string name = SetCustomerName();
+        Console.Write("Enter order amount: ");
+        decimal totalAmount = SetAmount();
+        Console.WriteLine("Select payment: \n 1. Card (Limit 1500 USD per operation) \n 2. PayPal (Limit 1000 USD per operation)" +
+            " \n 3. Bank transfer (Limit 3000 USD per operation) \n 4. Crypto (Limit 500 ETH per operation)");
+        int type = SetSelection();
+        IPaymentStrategy strategy = paymentStrategyFactory.Select(type);
+        Order order = new Order(orderId++, name, totalAmount);
+        await checkoutService.CheckoutAsync(order, strategy);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error: {ex.Message}");
+    }
+
+} while (askToContinue = AskToContinue());
 
 int SetSelection()
 {
     while (true)
     {
         Console.Write("Select: ");
-        if (int.TryParse(Console.ReadLine(), out int number)  && number >= 1 && number <= 3)
+        if (int.TryParse(Console.ReadLine(), out int number))
             return number;
         Console.Write("Unknown payment type! Select from 1 to 3: ");
     }
@@ -65,8 +56,27 @@ decimal SetAmount()
 {
     while (true)
     {
-        if (decimal.TryParse(Console.ReadLine(), out decimal amount))
+        if (decimal.TryParse(Console.ReadLine(), out decimal amount) && amount > 0)
             return amount;
-        Console.Write("Error! Enter a number: ");
+        Console.Write("Error! Enter a positive number: ");
+    }
+}
+bool AskToContinue()
+{
+    while (true)
+    {
+        Console.Write("Do you want to repeat? (y/n): ");
+        string? answer = Console.ReadLine();
+        if (answer != null && answer.ToLower() == "y")
+        {
+            return true;
+        }
+        if (answer != null && answer.ToLower() == "n")
+        {
+            Console.WriteLine("Exit");
+            return false;
+        }
+
+        Console.WriteLine("Please enter 'y' or 'n': ");
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Design_patterns
+﻿namespace Design_patterns.Payments
 {
     public class BankTransferPaymentStrategy : IPaymentStrategy
     {
@@ -14,10 +8,10 @@ namespace Design_patterns
             await Task.Delay(1500);
             if(amount <= 3000)
             {
-                Console.WriteLine($"Creating bank transfer for: {amount}");
+                Console.WriteLine($"Creating bank transfer for: {amount} USD");
                 return true;
             }                
-            Console.WriteLine("Payment must not be over 3000");
+            Console.WriteLine("Payment must not be over 3000 USD");
             return false;
             
         }

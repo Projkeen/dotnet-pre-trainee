@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Design_patterns
+﻿namespace Design_patterns.Payments
 {
     public class PayPalPaymentAdapter : IPaymentStrategy
     {
@@ -21,7 +15,7 @@ namespace Design_patterns
             bool result = _legacyPayPalClient.MakePayment((double)amount);
             if (result is false)
             {
-                Console.WriteLine("Payment must not be over 1000");
+                Console.WriteLine("Payment must not be over 1000 USD");
                 return false;
             }
 
