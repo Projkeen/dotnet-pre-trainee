@@ -188,5 +188,71 @@ Topics:
 
 
 
+
+
+\## Module 6
+
+
+
+Status: Completed
+
+
+
+Topics:
+
+
+
+\- Introduction to Dapper
+
+\- Connecting C# to SQL Server
+
+\- Querying Data with Dapper
+
+\- Insert, Update and Delete with Dapper
+
+\- Parameters and SQL Injection
+
+\- Async Database Operations
+
+\- Repository Pattern
+
+\- Transactions with Dapper
+
+
+
+
+
+\## Module 7
+
+
+
+Status: Completed
+
+
+
+Topics:
+
+
+
+\- What Are Design Patterns?
+
+\- Pattern Categories — Creational, Structural and Behavioral
+
+\- Factory Pattern
+
+\- Strategy Pattern
+
+\- Observer Pattern
+
+\- Adapter Pattern
+
+\- Singleton Pattern — Use with Care
+
+\- Choosing Patterns Without Overengineering
+
+
+
+
+
 &#x20;
 
