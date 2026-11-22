@@ -10,5 +10,7 @@ namespace LibraryManagementApi.Services
         Author CreateAuthor(CreateAuthorRequest createAuthorRequest);
         bool UpdateAuthor(UpdateAuthorRequest updateAuthorRequest, int id);
         bool DeleteAuthor(int id);
+        bool CheckAuthorExisting(int id);
+        bool CheckNotInFuture(DateTime dateTime);
     }
 }

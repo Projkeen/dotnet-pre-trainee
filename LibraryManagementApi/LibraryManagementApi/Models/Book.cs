@@ -1,9 +1,11 @@
-﻿namespace LibraryManagementApi.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LibraryManagementApi.Models
 {
     public class Book
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
+        public int Id { get; set; }        
+        public string? Title { get; set; }
         public int PublishedYear { get; set; }
         public int AuthorId { get; set; }
     }

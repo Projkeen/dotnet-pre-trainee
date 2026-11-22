@@ -17,7 +17,7 @@ namespace LibraryManagementApi.Data
 
         public int CreateBookId()
         {
-           return _nextBookId++;
+            return _nextBookId++;
         }
     }
 }

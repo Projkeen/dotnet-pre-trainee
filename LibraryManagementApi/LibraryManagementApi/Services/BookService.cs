@@ -11,6 +11,7 @@ namespace LibraryManagementApi.Services
         {
             _libraryStore = libraryStore;
         }
+
         public Book CreateBook(CreateBookRequest createBookRequest)
         {
             var book = new Book
@@ -20,7 +21,6 @@ namespace LibraryManagementApi.Services
                 PublishedYear = createBookRequest.PublishedYear,
                 AuthorId = createBookRequest.AuthorId
             };
-
             _libraryStore.Books.Add(book);
             return book;
         }
@@ -34,9 +34,11 @@ namespace LibraryManagementApi.Services
             return true;
         }
 
-        public IEnumerable<Book> GetAll()
+        public IEnumerable<Book> GetAll(string? searchByTitle = null)
         {
             var books = _libraryStore.Books;
+            if (!string.IsNullOrEmpty(searchByTitle))
+                books = (books.Where(b => b.Title.ToLower() == searchByTitle.ToLower()).ToList());
             return books;
         }
 
@@ -49,12 +51,19 @@ namespace LibraryManagementApi.Services
         public bool UpdateBook(UpdateBookRequest updateBookRequest, int id)
         {
             var book = _libraryStore.Books.FirstOrDefault(a => a.Id == id);
-            if ( book is null)
+            if (book is null)
                 return false;
             book.Title = updateBookRequest.Title;
             book.PublishedYear = updateBookRequest.PublishedYear;
             book.AuthorId = updateBookRequest.AuthorId;
-            return true;            
+            return true;
+        }
+
+        public bool CheckBookByAuthor(int authorId)
+        {
+            var checkBook = _libraryStore.Books.Where(b => b.AuthorId == authorId).FirstOrDefault();
+            if (checkBook is null) return true;
+            return false;
         }
     }
 }

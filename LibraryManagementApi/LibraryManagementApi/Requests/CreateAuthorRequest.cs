@@ -1,8 +1,12 @@
-﻿namespace LibraryManagementApi.Requests
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LibraryManagementApi.Requests
 {
     public class CreateAuthorRequest
     {
-        public string Name { get; set; }
+        [Required, MaxLength(50)]
+        public string? Name { get; set; }
+        [Required]        
         public DateTime DateOfBirth { get; set; }
     }
 }
