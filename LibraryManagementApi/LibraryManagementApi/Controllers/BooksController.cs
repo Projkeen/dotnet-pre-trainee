@@ -1,6 +1,7 @@
 ﻿using LibraryManagementApi.Data;
 using LibraryManagementApi.Models;
 using LibraryManagementApi.Requests;
+using LibraryManagementApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,24 +11,24 @@ namespace LibraryManagementApi.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly LibraryStore _libraryStore;
+        private readonly IBookService _books;
 
-        public BooksController(LibraryStore libraryStore)
+        public BooksController(IBookService books)
         {
-            _libraryStore = libraryStore;
+            _books = books;
         }
 
         [HttpGet("api/books")]
         public IActionResult GetAll()
         {
-            var books = _libraryStore.Books;
+            var books = _books.GetAll();
             return Ok(books);
         }
 
         [HttpGet("{id:int}")]
         public IActionResult GetById([FromRoute] int id)
         {
-            var book = _libraryStore.Books.FirstOrDefault(b => b.Id == id);
+            var book = _books.GetBookById(id);
             if (book is null)            
                 return NotFound($"Book with Id {id} not found");
             
@@ -37,15 +38,7 @@ namespace LibraryManagementApi.Controllers
         [HttpPost("api/books-create")]
         public IActionResult CreateBook([FromBody] CreateBookRequest request)
         {
-            var book = new Book
-            {
-                Id = _libraryStore.CreateBookId(),
-                Title = request.Title,
-                PublishedYear = request.PublishedYear,
-                AuthorId = request.AuthorId
-            };
-
-            _libraryStore.Books.Add(book);
+            var book = _books.CreateBook(request);
 
             return CreatedAtAction(nameof(GetById), new { id = book.Id }, book);
         }
@@ -53,23 +46,18 @@ namespace LibraryManagementApi.Controllers
         [HttpPut("{id:int}")]
         public IActionResult UpdateBook([FromBody] UpdateBookRequest request, int id)
         {
-            var book = _libraryStore.Books.FirstOrDefault(a => a.Id == id);
-            if (book is null)
-                return NotFound();
-            book.Title = request.Title;
-            book.PublishedYear = request.PublishedYear;  
-            book.AuthorId = request.AuthorId;
-            return Ok(book);
+            var checkBook = _books.UpdateBook(request, id);
+            if (checkBook is false)
+                return NotFound($"Book with Id {id} not found");           
+            return Ok(checkBook);
         }
 
         [HttpDelete("{id:int}")]
         public IActionResult DeleteBook([FromRoute] int id)
         {
-            var book = _libraryStore.Books.FirstOrDefault(a => a.Id == id);
-            if (book is null)
-                return NotFound();
-
-            _libraryStore.Books.Remove(book);
+            var checkBook = _books.DeleteBook(id);
+            if (checkBook is false)
+                return NotFound($"Book with Id {id} not found");                     
             return GetAll();
         }
     }

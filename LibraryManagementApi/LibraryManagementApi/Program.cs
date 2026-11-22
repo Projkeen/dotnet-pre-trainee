@@ -1,9 +1,11 @@
 using LibraryManagementApi.Data;
+using LibraryManagementApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<LibraryStore>();
+builder.Services.AddScoped<IAuthorService, AuthorService>().AddScoped<IBookService, BookService>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
