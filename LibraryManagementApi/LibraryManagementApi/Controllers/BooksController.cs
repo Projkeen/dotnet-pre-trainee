@@ -20,10 +20,10 @@ namespace LibraryManagementApi.Controllers
             _authors = authors;
         }
 
-        [HttpGet("api/books")]
-        public IActionResult GetAll([FromQuery] string? searchByTitle)
+        [HttpGet]
+        public IActionResult GetAll([FromQuery] string? searchByTitle, [FromQuery] int? authorId)
         {
-            var books = _books.GetAll(searchByTitle);
+            var books = _books.GetAll(searchByTitle, authorId);
             return Ok(books);
         }
 
@@ -36,7 +36,7 @@ namespace LibraryManagementApi.Controllers
             return Ok(book);
         }
 
-        [HttpPost("api/books-create")]
+        [HttpPost]
         public IActionResult CreateBook([FromBody] CreateBookRequest request)
         {
             if (!_authors.CheckAuthorExisting(request.AuthorId))
@@ -63,6 +63,6 @@ namespace LibraryManagementApi.Controllers
             if (checkBook is false)
                 return NotFound($"Book with Id {id} not found");
             return NoContent();
-        }
+        }               
     }
 }

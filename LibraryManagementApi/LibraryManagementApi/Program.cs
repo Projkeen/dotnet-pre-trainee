@@ -1,4 +1,5 @@
 using LibraryManagementApi.Data;
+using LibraryManagementApi.Middleware;
 using LibraryManagementApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,7 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
-
+app.UseMiddleware<RequestTimingMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

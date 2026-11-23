@@ -19,7 +19,7 @@ namespace LibraryManagementApi.Controllers
             _books = books;
         }
 
-        [HttpGet("api/authors")]
+        [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(_authors.GetAll());

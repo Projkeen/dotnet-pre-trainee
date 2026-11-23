@@ -16,7 +16,7 @@ namespace LibraryManagementApi.Services
 
         public bool CheckAuthorExisting(int id)
         {
-            var check = _libraryStore.Authors.Where(a => a.Id == id).FirstOrDefault();
+            var check = _libraryStore?.Authors?.Where(a => a.Id == id).FirstOrDefault();
             if (check is null)
                 return false;
             return true;
@@ -44,10 +44,10 @@ namespace LibraryManagementApi.Services
 
         public bool DeleteAuthor(int id)
         {
-            var author = _libraryStore.Authors.FirstOrDefault(a => a.Id == id);
+            var author = _libraryStore.Authors?.FirstOrDefault(a => a.Id == id);
             if (author is null)
                 return false;
-            _libraryStore.Authors.Remove(author);
+            _libraryStore.Authors?.Remove(author);
             return true;
         }
 
