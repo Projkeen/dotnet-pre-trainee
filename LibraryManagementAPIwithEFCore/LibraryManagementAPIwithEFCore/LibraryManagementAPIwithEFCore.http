@@ -1,0 +1,6 @@
+@LibraryManagementAPIwithEFCore_HostAddress = http://localhost:5250
+
+GET {{LibraryManagementAPIwithEFCore_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
