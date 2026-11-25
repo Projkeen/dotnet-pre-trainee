@@ -18,8 +18,9 @@ namespace LibraryManagementAPIwithEFCore.Services
 
         public async Task<bool> CheckAuthorExistingAsync(int id)
         {
-            var check = await _libraryContext.Authors.Where(a => a.Id == id).FirstOrDefaultAsync();
-            if (check is null)
+            //var check = await _libraryContext.Authors.Where(a => a.Id == id).FirstOrDefaultAsync();
+            var check = await _libraryContext.Authors.AnyAsync(a => a.Id == id);
+            if (check is false)
                 return false;
             return true;
         }

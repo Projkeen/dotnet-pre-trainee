@@ -1,6 +1,8 @@
 ﻿using LibraryManagementAPIwithEFCore.Data;
 using LibraryManagementAPIwithEFCore.Models;
 using LibraryManagementAPIwithEFCore.Requests;
+using LibraryManagementAPIwithEFCore.Responses;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibraryManagementAPIwithEFCore.Services
 {
@@ -12,58 +14,78 @@ namespace LibraryManagementAPIwithEFCore.Services
             _libraryContext = libraryContext;
         }
 
-        public Book CreateBook(CreateBookRequest createBookRequest)
+        public async Task<BookResponse> CreateBookAsync(CreateBookRequest createBookRequest)
         {
             var book = new Book
-            {
-                //Id = _libraryContext.CreateBookId(),
+            {                
                 Title = createBookRequest.Title,
                 PublishedYear = createBookRequest.PublishedYear,
-                AuthorId = createBookRequest.AuthorId
+                AuthorId = createBookRequest.AuthorId,
             };
             _libraryContext.Books?.Add(book);
-            return book;
+            await _libraryContext.SaveChangesAsync();
+            
+            return await GetBookByIdAsync(book.Id);            
         }
 
-        public bool DeleteBook(int id)
+        public async Task<bool> DeleteBookAsync(int id)
         {
-            var book = _libraryContext.Books?.FirstOrDefault(a => a.Id == id);
+            var book = await _libraryContext.Books.FirstOrDefaultAsync(a => a.Id == id);
             if (book is null)
                 return false;
-            _libraryContext.Books?.Remove(book);
+            _libraryContext.Books.Remove(book);
+            await _libraryContext.SaveChangesAsync();
             return true;
         }
 
-        public IEnumerable<Book> GetAll(string? searchByTitle = null, int? authorId = null)
+        public async Task<IEnumerable<BookResponse>> GetAllAsync(string? searchByTitle = null, int? authorId = null)
         {
-            var books = _libraryContext.Books;
+            IQueryable<Book> books = _libraryContext.Books.AsNoTracking();
+            var response = books.Select(a => new BookResponse
+            {
+                Id = a.Id,
+                Title = a.Title,
+                PublishedYear = a.PublishedYear,
+                AuthorId = a.AuthorId,
+                AuthorName = a.Author.Name,
+            });
+           
             //if (!string.IsNullOrEmpty(searchByTitle))
             //    books = (books?.Where(b => b.Title?.ToLower() == searchByTitle.ToLower()).ToList());
             //if (authorId.HasValue)
             //    books = (books?.Where(b => b.AuthorId == authorId.Value).ToList());
-            return books;
+            return await response.ToListAsync(); 
         }
 
-        public Book GetBookById(int id)
+        public async Task<BookResponse> GetBookByIdAsync(int id)
         {
-            var book = _libraryContext.Books?.FirstOrDefault(b => b.Id == id);
-            return book;
+            IQueryable<Book> books = _libraryContext.Books.AsNoTracking().Where(a => a.Id == id);
+            var response = books.Select(a => new BookResponse
+            {
+                Id = a.Id,
+                Title = a.Title,
+                PublishedYear = a.PublishedYear,
+                AuthorId = a.AuthorId,
+                AuthorName = a.Author.Name,
+            });
+            return await response.FirstOrDefaultAsync();
         }
 
-        public bool UpdateBook(UpdateBookRequest updateBookRequest, int id)
+        public async Task<bool> UpdateBookAsync(UpdateBookRequest updateBookRequest, int id)
         {
-            var book = _libraryContext.Books?.FirstOrDefault(a => a.Id == id);
+            var book = await _libraryContext.Books.FirstOrDefaultAsync(a => a.Id == id);
             if (book is null)
                 return false;
             book.Title = updateBookRequest.Title;
             book.PublishedYear = updateBookRequest.PublishedYear;
             book.AuthorId = updateBookRequest.AuthorId;
+            await _libraryContext.SaveChangesAsync();
             return true;
         }
 
-        public bool CheckBookByAuthor(int authorId)
+        public async Task<bool> CheckBookByAuthorAsync(int authorId)
         {
-            var checkBook = _libraryContext.Books?.Where(b => b.AuthorId == authorId).FirstOrDefault();
+            var checkBook = await _libraryContext.Books.Where(b => b.AuthorId == authorId).FirstOrDefaultAsync();
             if (checkBook is null) return true;
             return false;
         }        

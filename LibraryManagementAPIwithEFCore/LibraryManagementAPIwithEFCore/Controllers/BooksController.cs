@@ -21,16 +21,16 @@ namespace LibraryManagementAPIwithEFCore.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll([FromQuery] string? searchByTitle, [FromQuery] int? authorId)
+        public async Task<IActionResult> GetAll([FromQuery] string? searchByTitle, [FromQuery] int? authorId)
         {
-            var books = _books.GetAll(searchByTitle, authorId);
+            var books = await _books.GetAllAsync(searchByTitle, authorId);
             return Ok(books);
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var book = _books.GetBookById(id);
+            var book = await _books.GetBookByIdAsync(id);
             if (book is null)
                 return NotFound($"Book with Id {id} not found");
             return Ok(book);
@@ -41,7 +41,7 @@ namespace LibraryManagementAPIwithEFCore.Controllers
         {
             if (!await _authors.CheckAuthorExistingAsync(request.AuthorId))
                 return BadRequest();
-            var book = _books.CreateBook(request);
+            var book = await _books.CreateBookAsync(request);
             return CreatedAtAction(nameof(GetById), new { id = book.Id }, book);
         }
 
@@ -50,16 +50,16 @@ namespace LibraryManagementAPIwithEFCore.Controllers
         {
             if (!await _authors.CheckAuthorExistingAsync(request.AuthorId))
                 return BadRequest();
-            var checkBook = _books.UpdateBook(request, id);
+            var checkBook = await _books.UpdateBookAsync(request, id);
             if (checkBook is false)
                 return NotFound($"Book with Id {id} not found");
             return NoContent();
         }
 
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteBook([FromRoute] int id)
+        public async Task<IActionResult> DeleteBook([FromRoute] int id)
         {
-            var checkBook = _books.DeleteBook(id);
+            var checkBook = await _books.DeleteBookAsync(id);
             if (checkBook is false)
                 return NotFound($"Book with Id {id} not found");
             return NoContent();
