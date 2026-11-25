@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("LibraryDatabase");
 builder.Services.AddDbContext<LibraryContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
-builder.Services.AddSingleton<LibraryStore>();
 builder.Services.AddScoped<IAuthorService, AuthorService>().AddScoped<IBookService, BookService>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

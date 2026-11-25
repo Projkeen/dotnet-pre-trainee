@@ -20,52 +20,52 @@ namespace LibraryManagementAPIwithEFCore.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_authors.GetAll());
+            return Ok(await _authors.GetAllAsync());
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var author = _authors.GetAuthorById(id);
+            var author = await _authors.GetAuthorByIdAsync(id);
             if (author is null)
                 return NotFound($"Author with Id {id} not found");
             return Ok(author);
         }
 
         [HttpPost]
-        public ActionResult<Author> CreateAuthor([FromBody] CreateAuthorRequest request)
+        public async Task<IActionResult> CreateAuthor([FromBody] CreateAuthorRequest request)
         {
             if (!_authors.CheckNotInFuture(request.DateOfBirth))
                 return BadRequest();
-            var author = _authors.CreateAuthor(request);
+            var author = await _authors.CreateAuthorAsync(request);
             return CreatedAtAction(nameof(GetById), new { id = author.Id }, author);
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult UpdateAuthor([FromBody] UpdateAuthorRequest request, int id)
+        public async Task<IActionResult> UpdateAuthor([FromBody] UpdateAuthorRequest request, int id)
         {
             if (!_authors.CheckNotInFuture(request.DateOfBirth))
                 return BadRequest();
-            var checkAuthor = _authors.UpdateAuthor(request, id);
+            var checkAuthor = await _authors.UpdateAuthorAsync(request, id);
             if (checkAuthor is false)
                 return NotFound($"Author with Id {id} not found");
             return NoContent();
         }
 
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteAuthor([FromRoute] int id)
+        public async Task<IActionResult> DeleteAuthor([FromRoute] int id)
         {
-            if (!_authors.CheckAuthorExisting(id))
+            if (!await _authors.CheckAuthorExistingAsync(id))
                 return NotFound($"Author with Id {id} not found");
-            if (!_books.CheckBookByAuthor(id))
+            if (!await _authors.CheckBookByAuthorAsync(id))
                 return Conflict(new ProblemDetails
                 {
                     Status = StatusCodes.Status409Conflict,
                     Title = $"Author with id {id} has books. Delete his books"
                 });
-            var checkAuthor = _authors.DeleteAuthor(id);
+            var checkAuthor = await _authors.DeleteAuthorAsync(id);
             return NoContent();
         }
     }

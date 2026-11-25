@@ -37,18 +37,18 @@ namespace LibraryManagementAPIwithEFCore.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateBook([FromBody] CreateBookRequest request)
+        public async Task<IActionResult> CreateBook([FromBody] CreateBookRequest request)
         {
-            if (!_authors.CheckAuthorExisting(request.AuthorId))
+            if (!await _authors.CheckAuthorExistingAsync(request.AuthorId))
                 return BadRequest();
             var book = _books.CreateBook(request);
             return CreatedAtAction(nameof(GetById), new { id = book.Id }, book);
         }
 
         [HttpPut("{id:int}")]
-        public IActionResult UpdateBook([FromBody] UpdateBookRequest request, int id)
+        public async Task<IActionResult> UpdateBook([FromBody] UpdateBookRequest request, int id)
         {
-            if (!_authors.CheckAuthorExisting(request.AuthorId))
+            if (!await _authors.CheckAuthorExistingAsync(request.AuthorId))
                 return BadRequest();
             var checkBook = _books.UpdateBook(request, id);
             if (checkBook is false)
