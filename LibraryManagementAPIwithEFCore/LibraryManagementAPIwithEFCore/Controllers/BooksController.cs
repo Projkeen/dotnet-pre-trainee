@@ -1,6 +1,7 @@
 ﻿using LibraryManagementAPIwithEFCore.Data;
 using LibraryManagementAPIwithEFCore.Models;
 using LibraryManagementAPIwithEFCore.Requests;
+using LibraryManagementAPIwithEFCore.Responses;
 using LibraryManagementAPIwithEFCore.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +22,9 @@ namespace LibraryManagementAPIwithEFCore.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? searchByTitle, [FromQuery] int? authorId)
+        public async Task<IActionResult> GetAll([FromQuery] string? searchByTitle, [FromQuery] int? authorId, [FromQuery] int? publishedYear)
         {
-            var books = await _books.GetAllAsync(searchByTitle, authorId);
+            var books = await _books.GetAllAsync(searchByTitle, authorId, publishedYear);
             return Ok(books);
         }
 
@@ -49,10 +50,10 @@ namespace LibraryManagementAPIwithEFCore.Controllers
         public async Task<IActionResult> UpdateBook([FromBody] UpdateBookRequest request, int id)
         {
             if (!await _authors.CheckAuthorExistingAsync(request.AuthorId))
-                return BadRequest();
+                return BadRequest($"Author with id {request.AuthorId} not found");
             var checkBook = await _books.UpdateBookAsync(request, id);
             if (checkBook is false)
-                return NotFound($"Book with Id {id} not found");
+                return NotFound($"Book with Id {id} not found");                     
             return NoContent();
         }
 
@@ -63,6 +64,14 @@ namespace LibraryManagementAPIwithEFCore.Controllers
             if (checkBook is false)
                 return NotFound($"Book with Id {id} not found");
             return NoContent();
-        }               
+        }
+
+        [HttpGet("get-published-after-2015")]
+        public async Task<ActionResult<List<BookResponse>>> GetPublishedAfter2015()
+        {
+            var filteredBook = await _books.GetPublishedAfter2015Async();
+            return Ok(filteredBook);
+        }
+        
     }
 }

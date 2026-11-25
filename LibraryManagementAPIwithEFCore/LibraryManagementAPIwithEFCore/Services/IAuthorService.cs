@@ -6,7 +6,7 @@ namespace LibraryManagementAPIwithEFCore.Services
 {
     public interface IAuthorService
     {
-        Task<IEnumerable<AuthorResponse>> GetAllAsync();
+        Task<IEnumerable<AuthorResponse>> GetAllAsync(string? searchByName);
         Task<AuthorResponse> GetAuthorByIdAsync(int id);
         Task<AuthorResponse> CreateAuthorAsync(CreateAuthorRequest createAuthorRequest);
         Task<bool> UpdateAuthorAsync(UpdateAuthorRequest updateAuthorRequest, int id);
@@ -14,5 +14,6 @@ namespace LibraryManagementAPIwithEFCore.Services
         Task<bool> CheckAuthorExistingAsync(int id);
         Task<bool> CheckBookByAuthorAsync(int id);
         bool CheckNotInFuture(DateTime dateTime);
+        Task<IEnumerable<AuthorResponse>> GetBookCountByAuthorAsync();
     }
 }

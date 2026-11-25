@@ -38,9 +38,15 @@ namespace LibraryManagementAPIwithEFCore.Services
             return true;
         }
 
-        public async Task<IEnumerable<BookResponse>> GetAllAsync(string? searchByTitle = null, int? authorId = null)
+        public async Task<IEnumerable<BookResponse>> GetAllAsync(string? searchByTitle = null, int? authorId = null, int? publishedYear = null)
         {
             IQueryable<Book> books = _libraryContext.Books.AsNoTracking();
+            if (!string.IsNullOrEmpty(searchByTitle))
+                books = books.Where(b => b.Title.Contains(searchByTitle));
+            if (authorId.HasValue)
+                books = books.Where(b => b.AuthorId == authorId.Value);
+            if (publishedYear.HasValue)
+                books = books.Where(b => b.PublishedYear == publishedYear.Value);
             var response = books.Select(a => new BookResponse
             {
                 Id = a.Id,
@@ -48,12 +54,7 @@ namespace LibraryManagementAPIwithEFCore.Services
                 PublishedYear = a.PublishedYear,
                 AuthorId = a.AuthorId,
                 AuthorName = a.Author.Name,
-            });
-           
-            //if (!string.IsNullOrEmpty(searchByTitle))
-            //    books = (books?.Where(b => b.Title?.ToLower() == searchByTitle.ToLower()).ToList());
-            //if (authorId.HasValue)
-            //    books = (books?.Where(b => b.AuthorId == authorId.Value).ToList());
+            });          
             return await response.ToListAsync(); 
         }
 
@@ -88,6 +89,20 @@ namespace LibraryManagementAPIwithEFCore.Services
             var checkBook = await _libraryContext.Books.Where(b => b.AuthorId == authorId).FirstOrDefaultAsync();
             if (checkBook is null) return true;
             return false;
-        }        
+        }
+
+        public async Task<IEnumerable<BookResponse>> GetPublishedAfter2015Async()
+        {
+            var books = _libraryContext.Books.AsNoTracking().Where(b => b.PublishedYear > 2015).OrderByDescending(b => b.PublishedYear).ThenBy(b => b.Title);
+            var response = books.Select(a => new BookResponse
+            {
+                Id = a.Id,
+                Title = a.Title,
+                PublishedYear = a.PublishedYear,
+                AuthorId = a.AuthorId,
+                AuthorName = a.Author.Name,
+            });
+            return await response.ToListAsync();
+        }
     }
 }

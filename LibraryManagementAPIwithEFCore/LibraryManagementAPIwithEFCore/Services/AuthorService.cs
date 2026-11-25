@@ -35,8 +35,7 @@ namespace LibraryManagementAPIwithEFCore.Services
         public async Task<AuthorResponse> CreateAuthorAsync(CreateAuthorRequest createAuthorRequest)
         {
             var author = new Author
-            {
-                //Id = _libraryContext.CreateAuthorId(),
+            {                
                 Name = createAuthorRequest.Name,
                 DateOfBirth = createAuthorRequest.DateOfBirth
             };
@@ -62,15 +61,19 @@ namespace LibraryManagementAPIwithEFCore.Services
             return true;
         }
 
-        public async Task<IEnumerable<AuthorResponse>> GetAllAsync()
+        public async Task<IEnumerable<AuthorResponse>> GetAllAsync(string? searchByName)
         {
             IQueryable<Author> authors = _libraryContext.Authors.AsNoTracking();
+            if (!string.IsNullOrEmpty(searchByName))
+            {
+                authors = authors.Where(a=>a.Name.Contains(searchByName));
+            }
             var response = authors.Select(a => new AuthorResponse
             {
                 Id = a.Id,
                 Name = a.Name,
                 DateOfBirth = a.DateOfBirth,
-                Books = a.Books
+                //Books = a.Books
             });
             return await response.ToListAsync();
         }
@@ -104,6 +107,20 @@ namespace LibraryManagementAPIwithEFCore.Services
             var checkBook = await _libraryContext.Books.AnyAsync(b => b.AuthorId == id);
             if (checkBook is false) return true;
             return false;
+        }
+
+        public async Task<IEnumerable<AuthorResponse>> GetBookCountByAuthorAsync()
+        {
+            IQueryable<Author> authors = _libraryContext.Authors.AsNoTracking();
+            var response = authors.OrderBy(a => a.Name).Select(a => new AuthorResponse
+            {
+                Id = a.Id,
+                Name = a.Name,
+                DateOfBirth = a.DateOfBirth,
+                Books = a.Books,
+                BookCount = a.Books.Count()
+            });
+            return await response.ToListAsync();
         }
     }
 }

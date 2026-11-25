@@ -1,6 +1,7 @@
 ﻿using LibraryManagementAPIwithEFCore.Data;
 using LibraryManagementAPIwithEFCore.Models;
 using LibraryManagementAPIwithEFCore.Requests;
+using LibraryManagementAPIwithEFCore.Responses;
 using LibraryManagementAPIwithEFCore.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +21,9 @@ namespace LibraryManagementAPIwithEFCore.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? searchByName)
         {
-            return Ok(await _authors.GetAllAsync());
+            return Ok(await _authors.GetAllAsync(searchByName));
         }
 
         [HttpGet("{id:int}")]
@@ -38,7 +39,7 @@ namespace LibraryManagementAPIwithEFCore.Controllers
         public async Task<IActionResult> CreateAuthor([FromBody] CreateAuthorRequest request)
         {
             if (!_authors.CheckNotInFuture(request.DateOfBirth))
-                return BadRequest();
+                return BadRequest(new { error = "Invalid dateOfBirth", message = "dateOfBirth must be not in future" });
             var author = await _authors.CreateAuthorAsync(request);
             return CreatedAtAction(nameof(GetById), new { id = author.Id }, author);
         }
@@ -47,7 +48,7 @@ namespace LibraryManagementAPIwithEFCore.Controllers
         public async Task<IActionResult> UpdateAuthor([FromBody] UpdateAuthorRequest request, int id)
         {
             if (!_authors.CheckNotInFuture(request.DateOfBirth))
-                return BadRequest();
+                return BadRequest(new { error = "Invalid dateOfBirth", message = "dateOfBirth must be not in future" });
             var checkAuthor = await _authors.UpdateAuthorAsync(request, id);
             if (checkAuthor is false)
                 return NotFound($"Author with Id {id} not found");
@@ -68,5 +69,13 @@ namespace LibraryManagementAPIwithEFCore.Controllers
             var checkAuthor = await _authors.DeleteAuthorAsync(id);
             return NoContent();
         }
+
+        [HttpGet("get-book-counts")]
+        public async Task<IActionResult> GetBookCounts()
+        {
+            var countBooks = await _authors.GetBookCountByAuthorAsync();
+            return Ok(countBooks);
+        }
+      
     }
 }
