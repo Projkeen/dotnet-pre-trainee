@@ -40,6 +40,26 @@ namespace LibraryManagementAPIwithEFCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Authors");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateOfBirth = new DateTime(1903, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "George Orwell"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DateOfBirth = new DateTime(1892, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "J.R.R. Tolkien"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DateOfBirth = new DateTime(1952, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Robert C. Martin"
+                        });
                 });
 
             modelBuilder.Entity("LibraryManagementAPIwithEFCore.Models.Book", b =>
@@ -65,6 +85,29 @@ namespace LibraryManagementAPIwithEFCore.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Books");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AuthorId = 1,
+                            PublishedYear = 1949,
+                            Title = "1984"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AuthorId = 2,
+                            PublishedYear = 1937,
+                            Title = "The Hobbit"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AuthorId = 3,
+                            PublishedYear = 2008,
+                            Title = "Clean Code"
+                        });
                 });
 
             modelBuilder.Entity("LibraryManagementAPIwithEFCore.Models.Book", b =>

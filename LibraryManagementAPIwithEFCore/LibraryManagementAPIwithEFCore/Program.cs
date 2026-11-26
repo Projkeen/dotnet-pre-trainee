@@ -1,4 +1,5 @@
 using LibraryManagementAPIwithEFCore.Data;
+using LibraryManagementAPIwithEFCore.Middleware;
 using LibraryManagementAPIwithEFCore.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
-
+app.UseMiddleware<RequestTimingMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
