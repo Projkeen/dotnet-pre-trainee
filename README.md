@@ -28,7 +28,11 @@
 
 ##### \- Module 7: Finished
 
-##### \- Module 8: Started
+##### \- Module 8: Finished
+
+##### \- Module 9: Finished
+
+##### \- Module 10: Started
 
 
 

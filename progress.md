@@ -252,6 +252,72 @@ Topics:
 
 
 
+\## Module 8
+
+
+
+Status: Completed
+
+
+
+Topics:
+
+
+
+\- Introduction to ASP.NET Core
+
+\- HTTP Fundamentals — Requests, Responses and Status Codes
+
+\- Creating Your First ASP.NET Core Web API
+
+\- Controllers, Routing and Model Binding
+
+\- Dependency Injection in ASP.NET Core
+
+\- Middleware and the Request Pipeline
+
+\- RESTful API Design
+
+\- Swagger, OpenAPI and Postman
+
+\- Validation and API Error Responses
+
+
+
+
+
+\## Module 9
+
+
+
+Status: Completed
+
+
+
+Topics:
+
+
+
+\- Introduction to Entity Framework Core
+
+\- LINQ Fundamentals
+
+\- IEnumerable<T> vs IQueryable<T>
+
+\- Setting Up Entity Framework Core and LibraryContext
+
+\- Entity Relationships and Navigation Properties
+
+\- Migrations and Database Creation
+
+\- CRUD Operations with Entity Framework Core
+
+\- Advanced LINQ Queries and Related Data
+
+
+
+
+
 
 
 &#x20;
